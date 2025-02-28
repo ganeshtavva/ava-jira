@@ -1,7 +1,7 @@
 AP.resize("981", "100");
 
-const API_BASE_URL = window.ENV.API_BASE_URL;
-const API_KEY = window.ENV.API_KEY;
+const API_BASE_URL = 'https://da-api-jira-plugins-uat.azurewebsites.net/v1/api/jiraplugins';
+const API_KEY =  "eyJraWQiOiIxMDNkM2U1Mi00NWRmLTRiM2QtYTFlOS0wZmIzYThkMjlkMWQiLCJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2FzY2VuZGlvbi5jb20iLCJpZGVudGlmaWVyIjoiYXZhIy0qZ3B0IiwibmFtZSI6IkRueWFuZXNod2FyIEJob3NhbGUiLCJlbWFpbCI6ImRueWFuZXNod2FyLmJob3NhbGVAYXNjZW5kaW9uLmNvbSIsImlhdCI6MTcwMzY1MjA2MSwiZXhwIjoxNzM1Mjc0NDYxfQ._bDTgbQufmf_uWbsJxiPQh0N0z2pPYR6U05Jv0bi9tIXs3EK2fyxAZ1Z9rfMxPR8FIfc-8FFPLcWbXIRmFx9XQ";
 
 let jiraUserID;
 let jiraAccessToken;
