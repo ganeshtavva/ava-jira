@@ -1,8 +1,8 @@
 {
-  "name": "A.AVA Digital Ascender -  Indhar version",
+  "name": "A.AVA Digital Ascender -  Veerraju version",
   "description": "Plugin to generate stories in Epic",
   "key": "AVA.Ascender.Plugin3",
-  "baseUrl": "https://da-jira-plugin.netlify.app",
+  "baseUrl": "https://avajira.netlify.app",
   "vendor": {
     "name": "Ascendion, Inc.",
     "url": "https://Ascendion.com"
