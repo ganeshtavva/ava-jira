@@ -54,7 +54,9 @@ async function fetchUserDetails() {
     Authorization: `Basic ${btoa(jiraUserID + ":" + jiraAccessToken)}`,
     "Content-Type": "application/json",
   };
-   console.log(headers);
+   console.log(jiraUserID);
+   console.log(jiraAccessToken);
+
   try {
     const response = await fetch(url, { method: "GET", headers: headers });
 
