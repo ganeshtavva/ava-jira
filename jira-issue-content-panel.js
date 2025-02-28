@@ -49,11 +49,12 @@ async function handleButtonClick() {
 }
 async function fetchUserDetails() {
   const url = `${jiraUserUrl}/issue/${selectedIssue}`;
+  console.log(url);
   const headers = {
     Authorization: `Basic ${btoa(jiraUserID + ":" + jiraAccessToken)}`,
     "Content-Type": "application/json",
   };
-
+   console.log(headers);
   try {
     const response = await fetch(url, { method: "GET", headers: headers });
 
