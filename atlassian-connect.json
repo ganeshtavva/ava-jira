@@ -1,0 +1,64 @@
+{
+  "name": "A.AVA Digital Ascender -  Indhar version",
+  "description": "Plugin to generate stories in Epic",
+  "key": "AVA.Ascender.Plugin3",
+  "baseUrl": "https://da-jira-plugin.netlify.app",
+  "vendor": {
+    "name": "Ascendion, Inc.",
+    "url": "https://Ascendion.com"
+  },
+  "authentication": {
+    "type": "none" 
+  },
+  "apiMigrations": {
+    "gdpr": true
+  },
+  "scopes": [
+    "read",
+    "write",
+    "act_as_user",
+    "admin"
+  ],
+  "apiVersion": 1,
+  "modules": {
+    "jiraIssueContents": [
+      {
+        "icon": {
+          "url": "/icon.png"
+        },
+        "target": {
+          "type": "web_panel",
+          "url": "/jira-issue-content-panel.html"
+        },
+        "tooltip": {
+          "value": "A.AVA Digital Ascender"
+        },
+        "contentPresentConditions": [
+          {
+            "condition": "user_is_admin",
+            "invert": false 
+          }
+        ],
+        "jiraNativeAppsEnabled": false,
+        "name": {
+          "value": "Digital Ascender"
+        },
+        "key": "my-issue-content-panel"
+      }
+    ],
+    "configurePage": {
+      "url": "/configure",
+      "name": {
+        "value": "Configure A.AVA Digital Ascender"
+      },
+      "key": "configure"
+    },
+    "webhooks": [
+      {
+        "event": "jira:issue_updated",
+        "url": "/issue-updated",
+        "excludeBody": false
+      }
+    ]
+  }
+}
