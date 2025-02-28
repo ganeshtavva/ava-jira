@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configure A.AVA Digital Ascender</title>
+  <style>
+    body {
+      background-color: #f3f4f6;
+      padding: 10px;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      max-width: 474px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      padding: 20px 40px 50px;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #4a5568;
+    }
+
+    .form-input {
+      margin-top: 4px;
+      padding: 8px;
+      width: 100%;
+      border: 1px solid #d2d6dc;
+      border-radius: 4px;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 12px;
+      margin-top: 4px;
+      display: none;
+    }
+
+    .submit-button {
+      float: right;
+      background-color: #3d3db8;
+      color: #ffffff;
+      padding: 12px 18px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .submit-button:hover {
+      background-color: #3d3db0;
+    }
+
+    /* Loader styles */
+    .overlay {
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      background: #1D2125;
+      opacity: 0.75;
+      z-index: 9999;
+    }
+
+    .overlay__inner {
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+    }
+
+    .overlay__content {
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      display: inline-block;
+      border-width: 2px;
+      border-color: rgba(255, 255, 255, 0.05);
+      border-top-color: #fff;
+      animation: spin 1s infinite linear;
+      border-radius: 100%;
+      border-style: solid;
+    }
+
+    @keyframes spin {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .error-message {
+      color: red;
+      font-size: 1rem;
+      margin: 1rem 0;
+    }
+
+    .okayBtn {
+      color: white;
+      background-color: #3d3db8;
+      border: none;
+      font-size: 1rem;
+      line-height: 1.5rem;
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+  <script src="/env.js"></script>
+  <script src="https://connect-cdn.atl-paas.net/all.js"></script>
+  <script>
+
+    const API_BASE_URL = window.ENV.API_BASE_URL;
+    const API_KEY = window.ENV.API_KEY;
+
+    let jiraUserUrl = "";
+
+    // Extract jiraUserUrl using AP.getLocation
+    AP.getLocation(function (location) {
+      var url = location.toString();
+      var urlObject = new URL(url);
+      jiraUserUrl = urlObject.origin + '/rest/api/3';
+      fetchUserDetails(jiraUserUrl);
+    });
+
+    // Fetch existing user details
+    function fetchUserDetails(jiraUserUrl) {
+      showLoader();
+      fetch(`${API_BASE_URL}/ava/force/credential?jiraUserUrl=${jiraUserUrl}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'access-key': API_KEY
+        }
+      })
+        .then(response => response.json())
+        .then(result => {
+          hideLoader();
+          if (result.payload) {
+            document.getElementById('jiraUser').value = result.payload.jiraUser || '';
+            document.getElementById('jiraKey').value = result.payload.jiraKey || '';
+            // Hide Submit button if credentials exist
+            if (result.payload.jiraUser && result.payload.jiraKey) {
+              document.getElementById('submit').style.display = 'none';
+            }
+          }
+        })
+        .catch(error => {
+          hideLoader();
+          console.error('Error fetching user details:', error);
+          showError('Error fetching user details. Please try again.');
+        });
+    }
+
+    function handleFormSubmit() {
+      var jiraUser = document.getElementById('jiraUser').value;
+      var jiraKey = document.getElementById('jiraKey').value;
+
+      resetErrorMessages();
+
+      let isValid = validateForm();
+
+      if (!isValid) return;
+
+      showLoader();
+
+      var data = {
+        jiraUser: jiraUser,
+        jiraKey: jiraKey,
+        jiraUserUrl: jiraUserUrl
+      };
+
+      // Send the data to the API endpoint
+      fetch(`${API_BASE_URL}/ava/force/credential`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'access-key': API_KEY,
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => response.json())
+        .then(result => {
+          hideLoader();
+          alert('Configuration saved successfully!');
+          console.log(result);
+        })
+        .catch(error => {
+          hideLoader();
+          console.error('Error:', error);
+          showError('There was an error saving the configuration.');
+        });
+    }
+
+    function validateForm() {
+      let isValid = true;
+
+      var jiraUser = document.getElementById('jiraUser').value;
+      var jiraKey = document.getElementById('jiraKey').value;
+
+      if (!jiraUser) {
+        displayErrorMessage('jiraUserError', 'Please enter the Jira User ID.');
+        isValid = false;
+      }
+
+      if (!jiraKey) {
+        displayErrorMessage('jiraKeyError', 'Please enter the Jira Key.');
+        isValid = false;
+      }
+
+      return isValid;
+    }
+
+    function displayErrorMessage(elementId, message) {
+      var errorElement = document.getElementById(elementId);
+      errorElement.innerText = message;
+      errorElement.style.display = 'block';
+    }
+
+    function resetErrorMessages() {
+      var errorElements = document.querySelectorAll('.error-message');
+      errorElements.forEach(function (el) {
+        el.style.display = 'none';
+        el.innerText = '';
+      });
+    }
+
+    // Show loader
+    function showLoader() {
+      const loader = document.getElementById('loader');
+      loader.style.display = 'block';
+    }
+
+    // Hide loader
+    function hideLoader() {
+      const loader = document.getElementById('loader');
+      loader.style.display = 'none';
+    }
+
+    // Show error message
+    function showError(message) {
+      const errorMessage = document.getElementById('errorMessage');
+      const okayButton = document.getElementById('okayButton');
+      errorMessage.textContent = message;
+      errorMessage.classList.remove('hidden');
+      okayButton.style.display = 'inline-block';
+    }
+
+    // Handle 'Okay' button click
+    function handleOkayClick() {
+      const errorMessage = document.getElementById('errorMessage');
+      const okayButton = document.getElementById('okayButton');
+      
+      errorMessage.classList.add('hidden');
+      okayButton.style.display = 'none';
+    }
+
+    // Attach event listener to submit button
+    document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById('submit').addEventListener('click', handleFormSubmit);
+    });
+  </script>
+</head>
+
+<body>
+  <div class="overlay" id="loader" style="display: none;">
+    <div class="overlay__inner">
+      <div class="overlay__content">
+        <span class="spinner"></span>
+      </div>
+    </div>
+  </div>
+  
+  <div class="container">
+    <h1 class="title">Configure A.AVA Digital Ascender</h1>
+    <form id="configure-form">
+      <div class="form-group">
+        <label for="jiraUser" class="form-label">Jira User ID</label>
+        <input type="text" id="jiraUser" name="jiraUser" class="form-input" required>
+        <span id="jiraUserError" class="error-message">Please enter the Jira User ID.</span>
+      </div>
+      <div class="form-group">
+        <label for="jiraKey" class="form-label">Jira Key</label>
+        <input type="text" id="jiraKey" name="jiraKey" class="form-input" required>
+        <span id="jiraKeyError" class="error-message">Please enter the Jira Key.</span>
+      </div>
+      <button type="button" id="submit" class="submit-button">Submit</button>
+    </form>
+  </div>
+  
+  <p class="error-message hidden" id="errorMessage"></p>
+  <button id="okayButton" class="okayBtn" onclick="handleOkayClick()">Okay</button>
+</body>
+
+</html>

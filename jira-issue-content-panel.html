@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="favicon.ico">
+  <title>AVA Jira Plugin</title>
+  <script src="/env.js"></script>
+  <script src="https://connect-cdn.atl-paas.net/all.js" data-options="resize:false; sizeToParent:true;"></script>
+  <script src="jira-issue-content-panel.js" async></script>
+  <link rel="stylesheet" href="" id="light-theme">
+  <link rel="stylesheet" href="" id="dark-theme" disabled>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const contextPath = AJS.contextPath();
+      document.getElementById('light-theme').href = contextPath + '/public/light-theme.css';
+      document.getElementById('dark-theme').href = contextPath + '/public/dark-theme.css';
+
+      function applySystemTheme() {
+        const lightTheme = document.getElementById('light-theme');
+        const darkTheme = document.getElementById('dark-theme');
+
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          lightTheme.disabled = true;
+          darkTheme.disabled = false;
+        } else {
+          lightTheme.disabled = false;
+          darkTheme.disabled = true;
+        }
+      }
+
+      // Listen for changes in system theme and apply the theme
+      if (window.matchMedia) {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applySystemTheme);
+      }
+
+      // Apply theme on page load
+      applySystemTheme();
+    });
+  </script>
+
+  <style>
+    .btnDiv {
+      padding: 1vw;
+      display: flex;
+      align-items: center;
+    }
+
+    .startBtn {
+      color: white;
+      background-color: #3d3db8;
+      border: none;
+      font-size: 1rem;
+      line-height: 1.5rem;
+      cursor: pointer;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      flex-direction: row;
+    }
+
+    #response {
+      padding: 1vw;
+    }
+
+    /* Loader styles */
+    .overlay {
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      background: #1D2125;
+      opacity: 0.75;
+      z-index: 9999;
+    }
+
+    .overlay__inner {
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+    }
+
+    .overlay__content {
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      display: inline-block;
+      border-width: 2px;
+      border-color: rgba(255, 255, 255, 0.05);
+      border-top-color: #fff;
+      animation: spin 1s infinite linear;
+      border-radius: 100%;
+      border-style: solid;
+    }
+
+    @keyframes spin {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .error-message {
+      color: red;
+      font-size: 1rem;
+      margin: 1rem 0;
+    }
+
+    .okayBtn {
+      color: white;
+      background-color: #3d3db8;
+      border: none;
+      font-size: 1rem;
+      line-height: 1.5rem;
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .errorDiv {
+      margin: 6px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="overlay" id="loader" style="display: none;">
+    <div class="overlay__inner">
+      <div class="overlay__content">
+        <span class="spinner"></span>
+      </div>
+    </div>
+  </div>
+
+  <div id="buttonDiv">
+    <div class="btnDiv">
+      <button type="button" class="startBtn" onclick="handleButtonClick()">Generate User Story</button>
+    </div>
+    <div id="result"></div>
+  </div>
+  <p id="response"></p>
+  <div id="errorDiv" class="errorDiv">
+    <p class="error-message hidden" id="errorMessage"></p>
+    <button id="okayButton" class="okayBtn" onclick="handleOkayClick()">Okay</button>
+  </div>
+</body>
+
+</html>
