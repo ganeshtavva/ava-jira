@@ -99,34 +99,7 @@ async function fetchIssueDetails() {
       throw new Error(errorData.message || "Failed to fetch issue details");
     }
     const data = await apiResponse.json();
-
-    // Extracting required details
-    const userStoryDescription = data.fields.description?.content
-      ?.map((content) => content.text)
-      .join(" ") || "No description available";
-    const username = data.fields.reporter.displayName || "Unknown User";
-    const projectName = data.fields.project.name || "Unknown Project";
-    const projectId = data.fields.project.id || "Unknown ID";
-    const epicName = data.fields.parent?.fields?.summary || "No Epic";
-    const epicId = data.fields.parent?.id || "No Epic ID";
-    const userStoryName = data.fields.summary || "No Name";
-    const userStoryId = data.id || "No ID";
-
-    // Display results
-    document.getElementById("userStoryDescription").textContent =
-      `Description: ${userStoryDescription}`;
-    document.getElementById("username").textContent = `User: ${username}`;
-    document.getElementById(
-      "projectDetails"
-    ).textContent = `Project: ${projectName} (ID: ${projectId})`;
-    document.getElementById(
-      "epicDetails"
-    ).textContent = `Epic: ${epicName} (ID: ${epicId})`;
-    document.getElementById(
-      "userStoryDetails"
-    ).textContent = `User Story: ${userStoryName} (ID: ${userStoryId})`;
-
-
+    console.log(data);
     if (data.message === "Issue Description retrieved successfully") {
       epicDescription = data.issueDescription;
       await createStory();
