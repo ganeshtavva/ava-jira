@@ -39,10 +39,17 @@ AP.request({
       const response = JSON.parse(responseText);
       const fields = response.fields;
       console.log(fields);
+      console.log('project name:',fields.project.name);
+      console.log('Project Name:', fields.project.name);
+      console.log('Project ID:', fields.project.id);
+      console.log('Story Name:', fields.summary);
+      console.log('Story ID:', response.id);
+      console.log('Story Description:', fields.description || "No description");
+      console.log('Username:', fields.reporter.displayName);
+      
       // Extract issue type (Epic, Story, etc.)
       const issueType = response.fields.issuetype.name;
       console.log('Issue Type:', issueType);
-
       if (issueType === 'Epic') {
         console.log('Epic Name:', response.fields.summary); // Epic name
         console.log('Epic ID:', response.id); // Epic ID
