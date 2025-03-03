@@ -30,7 +30,6 @@ AP.getLocation(function (location) {
 
   // Set jiraUserUrl based on the current URL
   jiraUserUrl = urlObject.origin + "/rest/api/3";
-});
 
 AP.request({
   url: `/rest/api/2/issue/${selectedIssue}`, // Remove `jiraUserUrl`
@@ -61,7 +60,7 @@ AP.request({
   }
 });
 
-
+});
 async function handleButtonClick() {
   const buttonDiv = document.getElementById("buttonDiv");
   if (buttonDiv) {
