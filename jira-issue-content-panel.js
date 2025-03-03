@@ -8,9 +8,8 @@ let jiraAccessToken;
 let jiraUserUrl;
 let selectedIssue;
 let epicDescription;
-
 AP.request({
-  url: 'https://veerraju.atlassian.net/rest/api/2/issue/SCRUM-5',
+  url: `${jiraUserUrl}/rest/api/2/issue/${selectedIssue}`,
   type: 'GET',
   success: function(responseText) {
     const response = JSON.parse(responseText);
