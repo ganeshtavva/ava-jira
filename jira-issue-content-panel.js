@@ -46,6 +46,8 @@ AP.request({
       document.getElementById('storyId').textContent = response.fields.issuetype.name;
       console.log('Story Description:', fields.description || "No description");
       console.log('Username:', fields.reporter.displayName);
+      const epicID = fields.parent?.id || fields.customfield_10014 || "No Epic ID"; // Adjust custom field if needed
+      console.log('Epic ID:', epicID);
 
       
       // Extract issue type (Epic, Story, etc.)
@@ -59,7 +61,7 @@ AP.request({
         if (generateBtn) {
           generateBtn.disabled = false;
           generateBtn.addEventListener("click", function() {
-            handleStoryClick(response.id);
+            handleTestCaseClick(fields.reporter.displayName,fields.project.name,fields.project.id,epicID,response.id,fields.description);
           });
         }
       } else {
@@ -233,9 +235,19 @@ function handleOkayClick() {
   buttonDiv.style.display = "block";
 }
 
-function handleStoryClick(paylod){
-  console.log(paylod);
+function handleTestCaseClick(userName, projectName, projectId, epicId, storyId, storyDescription) {
+  const payload = {
+    userName,
+    projectName,
+    projectId,
+    epicId,
+    storyId,
+    storyDescription
+  };
+  
+  console.log("Payload:", payload);
 }
+
 // Ensure the button is correctly referenced in the DOM
 document.addEventListener("DOMContentLoaded", function () {
   const buttonDiv = document.getElementById("buttonDiv");
