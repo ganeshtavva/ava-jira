@@ -84,38 +84,6 @@ async function handleButtonClick() {
     hideLoader();
   }
 }
-async function fetchUserDetails() {
-  const url = `${jiraUserUrl}/issue/${selectedIssue}`;
-  console.log(url);
-  const headers = {
-    Authorization: `Basic ${btoa(jiraUserID + ":" + jiraAccessToken)}`,
-    "Content-Type": "application/json",
-  };
-   console.log(jiraUserID);
-   console.log(jiraAccessToken);
-
-  try {
-    const response = await fetch(url, { method: "GET", headers: headers });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to fetch issue details");
-    }
-
-    const data = await response.json();
-
-    // Extracting required details
-    const userStoryDescription = data.fields.description?.content
-      ?.map((content) => content.text)
-      .join(" ") || "No description available";
-     console.log(data);
-     console.log(userStoryDescription)
-
-    
-  } catch (error) {
-    showError(error.message);
-  }
-}
 
 async function fetchCredentials() {
   const credentialUrl = `${API_BASE_URL}/ava/force/credential?jiraUserUrl=${jiraUserUrl}`;
@@ -133,7 +101,6 @@ async function fetchCredentials() {
       jiraAccessToken = data.payload.jiraKey;
       jiraUserUrl = data.payload.jiraUserUrl;
       await fetchIssueDetails();
-      await fetchUserDetails();
     } else {
       throw new Error(
         "Invalid response: Missing payload in credentials API response"
