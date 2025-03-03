@@ -66,10 +66,6 @@ AP.request({
         }
       } else {
         console.log("This is NOT a Story. Disabling the button.");
-        const generateBtn = document.querySelector(".startBtn1");
-        if (generateBtn) {
-          generateBtn.disabled = true;
-        }
       }
       if (issueType === 'Epic') {
         console.log('Epic Name:', response.fields.summary); // Epic name
