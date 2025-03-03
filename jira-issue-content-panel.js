@@ -46,6 +46,27 @@ AP.request({
       document.getElementById('storyId').textContent = response.fields.issuetype.name;
       console.log('Story Description:', fields.description || "No description");
       console.log('Username:', fields.reporter.displayName);
+
+
+            if (issueType === 'Story') {
+        console.log("This is a Story. Enabling the 'Generate User Story' button.");
+        
+        // Enable the button and set the click event
+        const generateBtn = document.querySelector(".startBtn");
+        if (generateBtn) {
+          generateBtn.disabled = false;
+          generateBtn.addEventListener("click", function() {
+            handleStoryClick(response.id);
+          });
+        }
+      } else {
+        console.log("This is NOT a Story. Disabling the button.");
+        const generateBtn = document.querySelector(".startBtn");
+        if (generateBtn) {
+          generateBtn.disabled = true;
+        }
+      }
+
       
       // Extract issue type (Epic, Story, etc.)
       const issueType = response.fields.issuetype.name;
@@ -214,6 +235,9 @@ function handleOkayClick() {
   buttonDiv.style.display = "block";
 }
 
+function handleStoryClick(paylod){
+  console.log(paylod);
+}
 // Ensure the button is correctly referenced in the DOM
 document.addEventListener("DOMContentLoaded", function () {
   const buttonDiv = document.getElementById("buttonDiv");
