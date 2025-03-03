@@ -43,7 +43,7 @@ AP.request({
       console.log('Project ID:', fields.project.id);
       console.log('Story Name:', fields.summary);
       console.log('Story ID:', response.id);
-      document.getElementById('storyId').textContent = response.id;
+      document.getElementById('storyId').textContent = response.fields.issuetype.name;
       console.log('Story Description:', fields.description || "No description");
       console.log('Username:', fields.reporter.displayName);
       
