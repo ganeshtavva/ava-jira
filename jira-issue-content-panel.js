@@ -37,7 +37,8 @@ AP.request({
   success: function(responseText) {
     try {
       const response = JSON.parse(responseText);
-
+      const fields = response.fields;
+      console.log(fields);
       // Extract issue type (Epic, Story, etc.)
       const issueType = response.fields.issuetype.name;
       console.log('Issue Type:', issueType);
