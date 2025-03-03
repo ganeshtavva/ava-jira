@@ -53,19 +53,42 @@ AP.request({
       // Extract issue type (Epic, Story, etc.)
       const issueType = response.fields.issuetype.name;
       console.log('Issue Type:', issueType);
-       if (issueType === 'Story') {
-        console.log("This is a Story. Enabling the 'Generate User Story' button.");
+       const buttonTestCase = document.getElementById("buttonTestCase");
+
+            if (issueType === 'Story') {
+        console.log("This is a Story. Showing the 'Generate Test Cases' button.");
         
-        // Enable the button and set the click event
+        // Show the button
+        buttonTestCase.style.display = "block";
+
+        // Enable the button and prevent duplicate event listeners
         const generateBtn = document.querySelector(".startBtn1");
         if (generateBtn) {
           generateBtn.disabled = false;
-          generateBtn.addEventListener("click", function() {
-            handleTestCaseClick(fields.reporter.displayName,fields.project.name,fields.project.id,epicID,response.id,fields.description);
+
+          // Remove existing event listeners
+          generateBtn.replaceWith(generateBtn.cloneNode(true));
+
+          // Get the new cloned button
+          const newGenerateBtn = document.querySelector(".startBtn1");
+
+          // Add the click event handler
+          newGenerateBtn.addEventListener("click", function() {
+            handleTestCaseClick(
+              fields.reporter.displayName,
+              fields.project.name,
+              fields.project.id,
+              epicID,  // Ensure this is correctly defined
+              response.id,
+              fields.description || "No description"
+            );
           });
         }
       } else {
-        console.log("This is NOT a Story. Disabling the button.");
+        console.log("This is NOT a Story. Hiding the 'Generate Test Cases' button.");
+        
+        // Hide the button for non-story issues
+        buttonTestCase.style.display = "none";
       }
       if (issueType === 'Epic') {
         console.log('Epic Name:', response.fields.summary); // Epic name
