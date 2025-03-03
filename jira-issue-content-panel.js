@@ -47,8 +47,11 @@ AP.request({
       console.log('Story Description:', fields.description || "No description");
       console.log('Username:', fields.reporter.displayName);
 
-
-            if (issueType === 'Story') {
+      
+      // Extract issue type (Epic, Story, etc.)
+      const issueType = response.fields.issuetype.name;
+      console.log('Issue Type:', issueType);
+       if (issueType === 'Story') {
         console.log("This is a Story. Enabling the 'Generate User Story' button.");
         
         // Enable the button and set the click event
@@ -66,11 +69,6 @@ AP.request({
           generateBtn.disabled = true;
         }
       }
-
-      
-      // Extract issue type (Epic, Story, etc.)
-      const issueType = response.fields.issuetype.name;
-      console.log('Issue Type:', issueType);
       if (issueType === 'Epic') {
         console.log('Epic Name:', response.fields.summary); // Epic name
         console.log('Epic ID:', response.id); // Epic ID
