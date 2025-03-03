@@ -55,7 +55,7 @@ AP.request({
         console.log("This is a Story. Enabling the 'Generate User Story' button.");
         
         // Enable the button and set the click event
-        const generateBtn = document.querySelector(".startBtn");
+        const generateBtn = document.querySelector(".startBtn1");
         if (generateBtn) {
           generateBtn.disabled = false;
           generateBtn.addEventListener("click", function() {
@@ -64,7 +64,7 @@ AP.request({
         }
       } else {
         console.log("This is NOT a Story. Disabling the button.");
-        const generateBtn = document.querySelector(".startBtn");
+        const generateBtn = document.querySelector(".startBtn1");
         if (generateBtn) {
           generateBtn.disabled = true;
         }
