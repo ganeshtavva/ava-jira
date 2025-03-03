@@ -9,6 +9,32 @@ let jiraUserUrl;
 let selectedIssue;
 let epicDescription;
 
+AP.request({
+  url: 'https://veerraju.atlassian.net/rest/api/2/issue/SCRUM-5',
+  type: 'GET',
+  success: function(responseText) {
+    const response = JSON.parse(responseText);
+    
+    // Extract issue type (Epic, Story, etc.)
+    const issueType = response.fields.issuetype.name;
+    console.log('Issue Type:', issueType);
+
+    if (issueType === 'Epic') {
+      console.log('Epic Name:', response.fields.summary); // Epic name
+      console.log('Epic ID:', response.id); // Epic ID
+    } else if (issueType === 'Story') {
+      console.log('Story Name:', response.fields.summary); // Story name
+      console.log('Story ID:', response.id); // Story ID
+    } else {
+      console.log('Not an Epic or Story');
+    }
+  },
+  error: function(xhr, status, error) {
+    console.error('Error fetching issue:', status, error);
+  }
+});
+
+
 AP.getLocation(function (location) {
   const url = location.toString();
   const urlObject = new URL(url);
