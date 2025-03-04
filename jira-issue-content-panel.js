@@ -74,6 +74,7 @@ AP.request({
 
       if (issueType === 'Epic') {
         epicName = response.fields.summary;
+        uerStoryCase.style.display = "block";
         console.log('Epic Name:', response.fields.summary); // Epic name
         console.log('Epic ID:', response.id); // Epic ID
       } else if (issueType === 'Story') {
@@ -116,7 +117,6 @@ AP.request({
         console.log("This is NOT a Story. Hiding the 'Generate Test Cases' button.");  
         // Hide the button for non-story issues
         buttonTestCase.style.display = "none";
-        uerStoryCase.style.display = "none";
       }
     } catch (error) {
       console.error('Error parsing response:', error);
