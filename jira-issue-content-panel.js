@@ -70,6 +70,7 @@ AP.request({
       issueType = response.fields.issuetype.name;
       console.log('Issue Type:', issueType);
       const buttonTestCase = document.getElementById("buttonTestCase");
+      const uerStoryCase = document.getElementById("buttonDiv");
 
       if (issueType === 'Epic') {
         epicName = response.fields.summary;
@@ -115,6 +116,7 @@ AP.request({
         console.log("This is NOT a Story. Hiding the 'Generate Test Cases' button.");  
         // Hide the button for non-story issues
         buttonTestCase.style.display = "none";
+        uerStoryCase.style.display = "none";
       }
     } catch (error) {
       console.error('Error parsing response:', error);
