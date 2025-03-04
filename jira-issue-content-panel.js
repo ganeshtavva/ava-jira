@@ -8,12 +8,12 @@ let jiraAccessToken;
 let jiraUserUrl;
 let selectedIssue;
 let epicDescription;
-let projectName = fields.project.name;
-let projectId = fields.project.id;
-let storyName = fields.summary;
-let storyId = response.id;
-let storyDescription = fields.description || "No description";
-let userName = fields.reporter.displayName;
+let projectName;
+let projectId;
+let storyName;
+let storyId;
+let storyDescription;
+let userName;
 let epicID;
 let issueType;
 let epicName;
@@ -48,6 +48,13 @@ AP.request({
     try {
       const response = JSON.parse(responseText);
       const fields = response.fields;
+      projectName = fields.project.name;
+      projectId = fields.project.id;
+      storyName = fields.summary;
+      storyId = response.id;
+      storyDescription = fields.description || "No description";
+      userName = fields.reporter.displayName;
+
       console.log('Project Name:', projectName);
       console.log('Project ID:', projectId);
       console.log('Story Name:', storyName);
