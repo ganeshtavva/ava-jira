@@ -91,7 +91,7 @@ AP.request({
         buttonTestCase.style.display = "block";
 
         // Enable the button and prevent duplicate event listeners
-        const generateBtn = document.querySelector(".startBtn1");
+        const generateBtn = document.querySelector(".testCaseBtn");
         if (generateBtn) {
           generateBtn.disabled = false;
 
@@ -99,7 +99,7 @@ AP.request({
           generateBtn.replaceWith(generateBtn.cloneNode(true));
 
           // Get the new cloned button
-          const newGenerateBtn = document.querySelector(".startBtn1");
+          const newGenerateBtn = document.querySelector(".testCaseBtn");
 
           // Add the click event handler
           newGenerateBtn.addEventListener("click", function() {
