@@ -30,93 +30,7 @@ AP.getLocation(function (location) {
 
   // Set jiraUserUrl based on the current URL
   jiraUserUrl = urlObject.origin + "/rest/api/3";
-
-AP.request({
-  url: `/rest/api/2/issue/${selectedIssue}`, 
-  type: 'GET',
-  success: function(responseText) {
-    try {
-      const response = JSON.parse(responseText);
-      const fields = response.fields;
-      const projectName = fields.project.name;
-      const projectId = fields.project.id;
-      const storyName = fields.summary;
-      const storyId = response.id;
-      const storyDescription = fields.description || "No description";
-      const userName = fields.reporter.displayName;
-      console.log(fields);
-      console.log('Project Name:', projectName);
-      console.log('Project ID:', projectId);
-      console.log('Story Name:', storyName);
-      console.log('Story ID:', storyId);
-      document.getElementById('storyId').textContent = response.fields.issuetype.name;
-      console.log('Story Description:', storyDescription);
-      console.log('Username:', userName);
-      const epicID = fields.parent?.id || fields.customfield_10014 || "No Epic ID";
-      console.log('Epic ID:', epicID);
-
-      
-      // Extract issue type (Epic, Story, etc.)
-      const issueType = response.fields.issuetype.name;
-      console.log('Issue Type:', issueType);
-      const buttonTestCase = document.getElementById("buttonTestCase");
-      let epicName="";
-
-      if (issueType === 'Epic') {
-        epicName = response.fields.summary;
-        console.log('Epic Name:', response.fields.summary); // Epic name
-        console.log('Epic ID:', response.id); // Epic ID
-      } else if (issueType === 'Story') {
-        console.log('Story Name:', response.fields.summary); // Story name
-        console.log('Story ID:', response.id); // Story ID
-      } else {
-        console.log('Not an Epic or Story');
-      }
-
-      if (issueType === 'Story') {
-        console.log("This is a Story. Showing the 'Generate Test Cases' button.");
-        
-        // Show the button
-        buttonTestCase.style.display = "block";
-
-        // Enable the button and prevent duplicate event listeners
-        const generateBtn = document.querySelector(".startBtn1");
-        if (generateBtn) {
-          generateBtn.disabled = false;
-
-          // Remove existing event listeners
-          generateBtn.replaceWith(generateBtn.cloneNode(true));
-
-          // Get the new cloned button
-          const newGenerateBtn = document.querySelector(".startBtn1");
-
-          // Add the click event handler
-          newGenerateBtn.addEventListener("click", function() {
-            handleTestCaseClick(
-              fields.reporter.displayName,
-              fields.project.name,
-              fields.project.id,
-              epicID,  // Ensure this is correctly defined
-              response.id,
-              fields.description || "No description"
-            );
-          });
-        }
-      } else {
-        console.log("This is NOT a Story. Hiding the 'Generate Test Cases' button.");  
-        // Hide the button for non-story issues
-        buttonTestCase.style.display = "none";
-      }
-    } catch (error) {
-      console.error('Error parsing response:', error);
-    }
-  },
-  error: function(xhr, status, error) {
-    console.error('Error fetching issue:', status, error);
-  }
-});
-
-});
+})
 async function handleButtonClick() {
   const buttonDiv = document.getElementById("buttonDiv");
   if (buttonDiv) {
@@ -275,12 +189,70 @@ function handleTestCaseClick(userName, projectName, projectId, epicId, storyId, 
   console.log("Payload:", payload);
 }
 
-// Ensure the button is correctly referenced in the DOM
 document.addEventListener("DOMContentLoaded", function () {
-  const buttonDiv = document.getElementById("buttonDiv");
-  if (buttonDiv) {
-    buttonDiv.addEventListener("click", handleButtonClick);
-  } else {
-    console.error("Button element not found in the DOM.");
-  }
+  const buttonStory = document.getElementById("buttonStory");      // Generate User Story button div
+  const buttonTestCase = document.getElementById("buttonTestCase"); // Generate Test Cases button div
+
+  // Fetch issue details from JIRA
+  AP.request({
+    url: `/rest/api/2/issue/${selectedIssue}`,
+    type: "GET",
+    success: function (responseText) {
+      try {
+        const response = JSON.parse(responseText);
+        const fields = response.fields;
+        const issueType = fields.issuetype.name;
+
+        console.log("Issue Type:", issueType);
+        document.getElementById("storyId").textContent = issueType;
+
+        if (issueType === "Epic") {
+          console.log("This is an Epic. Showing 'Generate User Story' button.");
+          buttonStory.style.display = "block";
+          buttonTestCase.style.display = "none";
+
+          // Ensure the event listener is not duplicated
+          const storyButton = document.querySelector("#buttonStory button");
+          if (storyButton) {
+            storyButton.removeEventListener("click", handleButtonClick);
+            storyButton.addEventListener("click", handleButtonClick);
+          } else {
+            console.error("Story button not found.");
+          }
+        } else if (issueType === "Story") {
+          console.log("This is a Story. Showing 'Generate Test Cases' button.");
+          buttonStory.style.display = "none";
+          buttonTestCase.style.display = "block";
+
+          // Ensure the event listener is not duplicated
+          const testCaseButton = document.querySelector("#buttonTestCase button");
+          if (testCaseButton) {
+            testCaseButton.removeEventListener("click", handleTestCaseClick);
+            testCaseButton.addEventListener("click", function () {
+              handleTestCaseClick(
+                fields.reporter.displayName,
+                fields.project.name,
+                fields.project.id,
+                fields.parent ? fields.parent.id : "No Epic ID", // Epic ID (if available)
+                response.id,
+                fields.description || "No description"
+              );
+            });
+          } else {
+            console.error("Test Cases button not found.");
+          }
+        } else {
+          console.log("This is NOT an Epic or Story. Hiding both buttons.");
+          buttonStory.style.display = "none";
+          buttonTestCase.style.display = "none";
+        }
+      } catch (error) {
+        console.error("Error parsing response:", error);
+      }
+    },
+    error: function (xhr, status, error) {
+      console.error("Error fetching issue:", status, error);
+    },
+  });
 });
+
