@@ -59,7 +59,6 @@ AP.request({
       console.log('Project ID:', projectId);
       console.log('Story Name:', storyName);
       console.log('Story ID:', storyId);
-      document.getElementById('storyId').textContent = response.fields.issuetype.name;
       console.log('Story Description:', storyDescription);
       console.log('Username:', userName);
       epicID = fields.parent?.id || fields.customfield_10014 || "No Epic ID";
