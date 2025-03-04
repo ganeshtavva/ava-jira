@@ -93,10 +93,9 @@ AP.request({
         // Enable the button and prevent duplicate event listeners
         const generateBtn = document.querySelector(".testCaseBtn");
         if (generateBtn) {
-          generateBtn.disabled = false;
 
           // Remove existing event listeners
-          generateBtn.replaceWith(generateBtn.cloneNode(true));
+          generateBtn.removeEventListener("click", handleTestCaseClick);
 
           // Get the new cloned button
           const newGenerateBtn = document.querySelector(".testCaseBtn");
