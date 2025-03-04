@@ -32,30 +32,48 @@ AP.getLocation(function (location) {
   jiraUserUrl = urlObject.origin + "/rest/api/3";
 
 AP.request({
-  url: `/rest/api/2/issue/${selectedIssue}`, // Remove `jiraUserUrl`
+  url: `/rest/api/2/issue/${selectedIssue}`, 
   type: 'GET',
   success: function(responseText) {
     try {
       const response = JSON.parse(responseText);
       const fields = response.fields;
+      const projectName = fields.project.name;
+      const projectId = fields.project.id;
+      const storyName = fields.summary;
+      const storyId = response.id;
+      const storyDescription = fields.description || "No description";
+      const userName = fields.reporter.displayName;
       console.log(fields);
-      console.log('Project Name:', fields.project.name);
-      console.log('Project ID:', fields.project.id);
-      console.log('Story Name:', fields.summary);
-      console.log('Story ID:', response.id);
+      console.log('Project Name:', projectName);
+      console.log('Project ID:', projectId);
+      console.log('Story Name:', storyName);
+      console.log('Story ID:', storyId);
       document.getElementById('storyId').textContent = response.fields.issuetype.name;
-      console.log('Story Description:', fields.description || "No description");
-      console.log('Username:', fields.reporter.displayName);
-      const epicID = fields.parent?.id || fields.customfield_10014 || "No Epic ID"; // Adjust custom field if needed
+      console.log('Story Description:', storyDescription);
+      console.log('Username:', userName);
+      const epicID = fields.parent?.id || fields.customfield_10014 || "No Epic ID";
       console.log('Epic ID:', epicID);
 
       
       // Extract issue type (Epic, Story, etc.)
       const issueType = response.fields.issuetype.name;
       console.log('Issue Type:', issueType);
-       const buttonTestCase = document.getElementById("buttonTestCase");
+      const buttonTestCase = document.getElementById("buttonTestCase");
+      let epicName="";
 
-            if (issueType === 'Story') {
+      if (issueType === 'Epic') {
+        epicName = response.fields.summary;
+        console.log('Epic Name:', response.fields.summary); // Epic name
+        console.log('Epic ID:', response.id); // Epic ID
+      } else if (issueType === 'Story') {
+        console.log('Story Name:', response.fields.summary); // Story name
+        console.log('Story ID:', response.id); // Story ID
+      } else {
+        console.log('Not an Epic or Story');
+      }
+
+      if (issueType === 'Story') {
         console.log("This is a Story. Showing the 'Generate Test Cases' button.");
         
         // Show the button
@@ -85,19 +103,9 @@ AP.request({
           });
         }
       } else {
-        console.log("This is NOT a Story. Hiding the 'Generate Test Cases' button.");
-        
+        console.log("This is NOT a Story. Hiding the 'Generate Test Cases' button.");  
         // Hide the button for non-story issues
         buttonTestCase.style.display = "none";
-      }
-      if (issueType === 'Epic') {
-        console.log('Epic Name:', response.fields.summary); // Epic name
-        console.log('Epic ID:', response.id); // Epic ID
-      } else if (issueType === 'Story') {
-        console.log('Story Name:', response.fields.summary); // Story name
-        console.log('Story ID:', response.id); // Story ID
-      } else {
-        console.log('Not an Epic or Story');
       }
     } catch (error) {
       console.error('Error parsing response:', error);
