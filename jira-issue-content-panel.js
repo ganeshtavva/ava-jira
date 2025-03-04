@@ -86,7 +86,7 @@ AP.request({
 
       if (issueType === 'Story') {
         console.log("This is a Story. Showing the 'Generate Test Cases' button.");
-        
+        uerStoryCase.style.display = "none";
         // Show the button
         buttonTestCase.style.display = "block";
 
