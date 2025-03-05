@@ -220,7 +220,7 @@ async function createStory() {
     }
 }
 function handleTestCaseClick(project,epicId,userName, storyId, storyDescription) {
- await fetchUserCredentials();
+fetchUserCredentials();
 const payload = {
     project,
     epicId,
