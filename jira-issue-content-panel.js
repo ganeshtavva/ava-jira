@@ -249,13 +249,11 @@ async function fetchUserCredentials() {
         }
 
         const data = await response.json();
+        userEmail = data.payload.jiraUser;
         console.log(data);
     } catch (error) {
         console.error("Error fetching credentials:", error.message);
 }
-    const data = await response.json();
-    userEmail = data.payload.jiraUser;
-    console.log(data);
 }    
 // Event listener setup
 document.addEventListener("DOMContentLoaded", function () {
