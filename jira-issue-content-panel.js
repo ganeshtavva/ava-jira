@@ -55,7 +55,6 @@ AP.getLocation(function (location) {
                 storyDescription = fields.description || "No description";
                 userName = fields.reporter.displayName;
 
-                console.log('Email id:', userEmail);
                 console.log('Project Name:', projectName);
                 console.log('Project ID:', projectId);
                 console.log('Story Name:', storyName);
@@ -219,12 +218,12 @@ async function createStory() {
         throw error;
     }
 }
-function handleTestCaseClick(project,epicId,userName, storyId, storyDescription) {
+function handleTestCaseClick(project,epicId,storyId, storyDescription) {
 fetchUserCredentials();
 const payload = {
     project,
     epicId,
-    userName,
+    userEmail,
     storyId,
     storyDescription
   };
@@ -255,6 +254,7 @@ async function fetchUserCredentials() {
         console.error("Error fetching credentials:", error.message);
 }
     const data = await response.json();
+    userEmail = data.payload.jiraUser;
     console.log(data);
 }    
 // Event listener setup
