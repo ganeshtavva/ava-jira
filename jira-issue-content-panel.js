@@ -17,6 +17,7 @@ let userName;
 let epicID;
 let issueType;
 let epicName;
+let userEmail;
 
 
 AP.getLocation(function (location) {
@@ -54,7 +55,8 @@ AP.request({
       storyId = response.id;
       storyDescription = fields.description || "No description";
       userName = fields.reporter.displayName;
-
+      userEmail = fields.reporter.emailAddress || "Email not available"
+      console.log('Email id:', userEmail);
       console.log('Project Name:', projectName);
       console.log('Project ID:', projectId);
       console.log('Story Name:', storyName);
@@ -102,12 +104,11 @@ AP.request({
           // Add the click event handler
           newGenerateBtn.addEventListener("click", function() {
             handleTestCaseClick(
-              fields.reporter.displayName,
-              fields.project.name,
-              fields.project.id,
-              epicID,  // Ensure this is correctly defined
-              response.id,
-              fields.description || "No description"
+              projectName,
+              epicID,
+              userEmail,
+              storyId,              
+              storyDescription
             );
           });
         }
@@ -271,12 +272,11 @@ function handleOkayClick() {
   buttonDiv.style.display = "block";
 }
 
-function handleTestCaseClick(userName, projectName, projectId, epicId, storyId, storyDescription) {
+function handleTestCaseClick(project,epicId,userName, storyId, storyDescription) {
   const payload = {
-    userName,
-    projectName,
-    projectId,
+    project,
     epicId,
+    userName,
     storyId,
     storyDescription
   };
