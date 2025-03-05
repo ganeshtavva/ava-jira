@@ -54,7 +54,6 @@ AP.getLocation(function (location) {
                 storyId = response.id;
                 storyDescription = fields.description || "No description";
                 userName = fields.reporter.displayName;
-                userEmail = fields.reporter.emailAddress || "Email not available";
 
                 console.log('Email id:', userEmail);
                 console.log('Project Name:', projectName);
@@ -96,7 +95,7 @@ AP.getLocation(function (location) {
                     if (generateBtn) {
                         generateBtn.removeEventListener("click", handleTestCaseClick);
                         generateBtn.addEventListener("click", function () {
-                            handleTestCaseClick(projectName, epicID, userEmail, storyId, storyDescription);
+                            handleTestCaseClick(projectName, epicID, storyId, storyDescription);
                         });
                     }
                 } else {
@@ -221,7 +220,8 @@ async function createStory() {
     }
 }
 function handleTestCaseClick(project,epicId,userName, storyId, storyDescription) {
-  const payload = {
+ await fetchUserCredentials();
+const payload = {
     project,
     epicId,
     userName,
@@ -230,13 +230,6 @@ function handleTestCaseClick(project,epicId,userName, storyId, storyDescription)
   };
 
   console.log("Payload:", payload);
-  const credentialUrl = `${API_BASE_URL}/ava/force/credential?jiraUserUrl=${jiraUserUrl}`;
-  const headers = { "access-key": API_KEY };
-  const response = await fetch(credentialUrl, { headers: headers });
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to fetch credentials");
-  await fetchUserCredentials();
 }
 async function fetchUserCredentials() {
     const credentialUrl = `${API_BASE_URL}/ava/force/credential?jiraUserUrl=${encodeURIComponent(jiraUserUrl)}`;
