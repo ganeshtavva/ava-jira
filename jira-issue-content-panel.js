@@ -235,7 +235,7 @@ async function createStory() {
 }
 
 async function  handleTestCaseClick(project,epicId,storyId, storyDescription) {
-  //await fetchUserCredentials();
+  await fetchUserCredentials();
   const payload = {
      project,
      epicId,
@@ -247,11 +247,11 @@ async function  handleTestCaseClick(project,epicId,storyId, storyDescription) {
    console.log("Payload:", payload);
  }
  async function fetchUserCredentials() {
-     const credentialUrl = `${API_BASE_URL}/ava/force/credential?jiraUserUrl=${encodeURIComponent(jiraUserUrl)}`;
-     const headers = { "access-key": API_KEY };
- 
-     try {
-         const response = await fetch(credentialUrl, { headers });
+  const credentialUrl = `${API_BASE_URL}/ava/force/credential?jiraUserUrl=${jiraUserUrl}`;
+  const headers = { "access-key": API_KEY };
+
+  try {
+    const response = await fetch(credentialUrl, { headers: headers });
  
          if (!response.ok) {
              let errorMessage = "Failed to fetch credentials";
