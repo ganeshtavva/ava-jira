@@ -241,9 +241,9 @@ function handleOkayClick() {
   buttonDiv.style.display = "block";
 }
 
-function handleTestCaseClick(project,epicId,storyId, storyDescription) {
-fetchUserCredentials();
-const payload = {
+async function function handleTestCaseClick(project,epicId,storyId, storyDescription) {
+ await fetchUserCredentials();
+ const payload = {
     project,
     epicId,
     userEmail,
