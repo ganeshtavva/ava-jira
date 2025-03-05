@@ -283,6 +283,15 @@ function handleTestCaseClick(project,epicId,userName, storyId, storyDescription)
   };
   
   console.log("Payload:", payload);
+  const credentialUrl = `${API_BASE_URL}/ava/force/credential?jiraUserUrl=${jiraUserUrl}`;
+  const headers = { "access-key": API_KEY };
+  const response = await fetch(credentialUrl, { headers: headers });
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to fetch credentials");
+    }
+    const data = await response.json();
+    console.log(data);
 }
 
 // Ensure the button is correctly referenced in the DOM
