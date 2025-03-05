@@ -218,6 +218,29 @@ async function createStory() {
         throw error;
     }
 }
+// Show loader message
+function showLoader() {
+const loader = document.getElementById("loader");
+loader.style.display = "block";
+}
+
+// Hide loader message
+function hideLoader() {
+const loader = document.getElementById("loader");
+loader.style.display = "none";
+}
+
+// Handle 'Okay' button click
+function handleOkayClick() {
+  const errorMessage = document.getElementById("errorMessage");
+  const okayButton = document.getElementById("okayButton");
+  const buttonDiv = document.getElementById("buttonDiv");
+
+  errorMessage.classList.add("hidden");
+  okayButton.style.display = "none";
+  buttonDiv.style.display = "block";
+}
+
 function handleTestCaseClick(project,epicId,storyId, storyDescription) {
 fetchUserCredentials();
 const payload = {
