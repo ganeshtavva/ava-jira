@@ -49,6 +49,7 @@ AP.request({
     try {
       const response = JSON.parse(responseText);
       const fields = response.fields;
+      console.log(fields);
       projectName = fields.project.name;
       projectId = fields.project.id;
       storyName = fields.summary;
@@ -73,7 +74,12 @@ AP.request({
       console.log('Issue Type:', issueType);
       const buttonTestCase = document.getElementById("buttonTestCase");
       const uerStoryCase = document.getElementById("buttonDiv");
+      const reporterId = fields.reporter.accountId;  // Get reporter's accountId
 
+      console.log("Reporter Account ID:", reporterId);
+
+      // Fetch email using accountId
+      getUserEmail(reporterId);
       if (issueType === 'Epic') {
         epicName = response.fields.summary;
         uerStoryCase.style.display = "block";
@@ -283,33 +289,24 @@ function handleTestCaseClick(project,epicId,userName, storyId, storyDescription)
   };
   
   console.log("Payload:", payload);
-  fetchUserCredentials();
 }
-async function fetchUserCredentials() {
-    const credentialUrl = `${API_BASE_URL}/ava/force/credential?jiraUserUrl=${encodeURIComponent(jiraUserUrl)}`;
-    const headers = { "access-key": API_KEY };
-
-    try {
-        const response = await fetch(credentialUrl, { headers });
-
-        if (!response.ok) {
-            let errorMessage = "Failed to fetch credentials";
-            try {
-                const errorData = await response.json();
-                errorMessage = errorData.message || errorMessage;
-            } catch (parseError) {
-                console.error("Error parsing error response:", parseError);
-            }
-            throw new Error(errorMessage);
-        }
-
-        const data = await response.json();
-        console.log(data);
-    } catch (error) {
-        console.error("Error fetching credentials:", error.message);
+function getUserEmail(accountId) {
+  AP.request({
+    url: `/rest/api/3/user?accountId=${accountId}`,
+    type: 'GET',
+    success: function(userResponse) {
+      try {
+        const user = JSON.parse(userResponse);
+        console.log("User Email:", user.emailAddress || "Email not available");
+      } catch (error) {
+        console.error("Error parsing user response:", error);
+      }
+    },
+    error: function(error) {
+      console.error("Error fetching user details:", error);
     }
+  });
 }
-
 
 // Ensure the button is correctly referenced in the DOM
 document.addEventListener("DOMContentLoaded", function () {
