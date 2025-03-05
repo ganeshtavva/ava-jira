@@ -220,7 +220,50 @@ async function createStory() {
         throw error;
     }
 }
+function handleTestCaseClick(project,epicId,userName, storyId, storyDescription) {
+  const payload = {
+    project,
+    epicId,
+    userName,
+    storyId,
+    storyDescription
+  };
 
+  console.log("Payload:", payload);
+  const credentialUrl = `${API_BASE_URL}/ava/force/credential?jiraUserUrl=${jiraUserUrl}`;
+  const headers = { "access-key": API_KEY };
+  const response = await fetch(credentialUrl, { headers: headers });
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to fetch credentials");
+  await fetchUserCredentials();
+}
+async function fetchUserCredentials() {
+    const credentialUrl = `${API_BASE_URL}/ava/force/credential?jiraUserUrl=${encodeURIComponent(jiraUserUrl)}`;
+    const headers = { "access-key": API_KEY };
+
+    try {
+        const response = await fetch(credentialUrl, { headers });
+
+        if (!response.ok) {
+            let errorMessage = "Failed to fetch credentials";
+            try {
+                const errorData = await response.json();
+                errorMessage = errorData.message || errorMessage;
+            } catch (parseError) {
+                console.error("Error parsing error response:", parseError);
+            }
+            throw new Error(errorMessage);
+        }
+
+        const data = await response.json();
+        console.log(data);
+    } catch (error) {
+        console.error("Error fetching credentials:", error.message);
+}
+    const data = await response.json();
+    console.log(data);
+}    
 // Event listener setup
 document.addEventListener("DOMContentLoaded", function () {
     const buttonDiv = document.getElementById("buttonDiv");
