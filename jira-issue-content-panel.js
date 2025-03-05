@@ -248,6 +248,24 @@ async function  handleTestCaseClick(project,epicId,storyId, storyDescription) {
   body: 'This is a message for the user!',
   type: 'info' // Types: 'info', 'success', 'warning', 'error'
 });
+AP.inlineDialog.create({
+  key: "my-inline-dialog",
+  width: "300px",
+  height: "auto",
+  target: "my-button",
+  hideOnUnfocus: true,
+  chrome: true,
+  onHover: false,
+  onShow: function(dialog) {
+    dialog.setBody(`
+      <div style="padding: 10px; font-family: Arial, sans-serif;">
+        <strong>Your team is working in Confluence</strong>
+        <p>Don’t miss out on the conversations happening between your collaborators!</p>
+        <a href="https://www.atlassian.com/confluence" target="_blank">Access Confluence for free</a>
+      </div>
+    `);
+  }
+});
 
   
    console.log("Payload:", payload);
