@@ -235,7 +235,7 @@ async function createStory() {
 }
 
 async function  handleTestCaseClick(project,epicId,storyId, storyDescription) {
-  await fetchUserCredentials();
+  //await fetchUserCredentials();
   const payload = {
      project,
      epicId,
