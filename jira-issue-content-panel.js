@@ -63,6 +63,7 @@ AP.request({
       console.log('Story ID:', storyId);
       console.log('Story Description:', storyDescription);
       console.log('Username:', userName);
+      console.log('jirauserid:',jiraUserID);
       epicID = fields.parent?.id || fields.customfield_10014 || "No Epic ID";
       console.log('Epic ID:', epicID);
 
