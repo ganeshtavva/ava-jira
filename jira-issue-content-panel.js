@@ -187,13 +187,7 @@ async function fetchIssueDetails() {
       throw new Error("Unexpected response format from issue details API");
     }
   } catch (error) {
-    //showError(error.message);
-      AP.flag.create({
-    title: "Error",
-    body: error.message,
-    type: "error"
-  });
-
+    showError(error.message);
     throw error; // rethrow to stop further processing
   }
 }
@@ -231,29 +225,11 @@ async function createStory() {
     buttonDiv.style.display = "none";
 
     const responseElement = document.getElementById("response");
-    /*responseElement.textContent =
+    responseElement.textContent =
       storyResponse.message +
-      " .Kindly refresh the page to view the newly created stories.";*/
-    
-// Update <p> content
-responseElement.textContent =
-  storyResponse.message + " . Kindly refresh the page to view the newly created stories.";
-
-// Show AP.flag notification
-AP.flag.create({
-  title: "Success!",
-  body: responseElement.textContent,
-  type: "success"
-});
-
+      " .Kindly refresh the page to view the newly created stories.";
   } catch (error) {
-    //showError(error.message);
-      AP.flag.create({
-    title: "Error",
-    body: error.message,
-    type: "error"
-  });
-
+    showError(error.message);
     throw error; // rethrow to stop further processing
   }
 }
