@@ -55,21 +55,11 @@ AP.getLocation(function (location) {
             storyDescription = fields.description || "No description";
             userName = fields.reporter.displayName;
 
-            console.log('Project Name:', projectName);
-            console.log('Project ID:', projectId);
-            console.log('Story Name:', storyName);
-            console.log('Story ID:', storyId);
-            console.log('Story Description:', storyDescription);
-            console.log('Username:', userName);
-
             epicID = fields.parent?.id || fields.customfield_10014 || "No Epic ID";
-            console.log('Epic ID:', epicID);
 
             // Extract issue type (Epic, Story, etc.)
             issueType = response.fields.issuetype.name;
             console.log('Issue Type:', issueType);
-            const reporterAccountId = fields.reporter.accountId;  // Reporter
-            fetchUserEmail(reporterAccountId);
 
             const buttonTestCase = document.getElementById("buttonTestCase");
             const userStoryCase = document.getElementById("buttonDiv");
@@ -334,26 +324,6 @@ function hideLoader() {
   loader.style.display = "none";
 }
 
-function fetchUserEmail(accountId) {
-    AP.request({
-        url: `/rest/api/2/user?accountId=${accountId}`,
-        type: "GET",
-        success: function (responseText) {
-            try {
-                console.log(accountId);
-                console.log("/rest/api/2/user?accountId=${accountId}");
-                const response = JSON.parse(responseText);
-                userEmail = response.emailAddress || "Email not available";
-                console.log("User Email:", userEmail);
-            } catch (error) {
-                console.error("Error parsing user email response:", error);
-            }
-        },
-        error: function (xhr, status, error) {
-            console.error("Error fetching user email:", status, error);
-        }
-    });
-}
 // Handle 'Okay' button click
 function handleOkayClick() {
   const errorMessage = document.getElementById("errorMessage");
