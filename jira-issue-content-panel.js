@@ -241,7 +241,13 @@ AP.flag.create({
 });
 
   } catch (error) {
-    showError(error.message);
+    //showError(error.message);
+      AP.flag.create({
+    title: "Error",
+    body: error.message,
+    type: "error"
+  });
+
     throw error; // rethrow to stop further processing
   }
 }
