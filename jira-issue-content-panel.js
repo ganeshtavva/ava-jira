@@ -336,7 +336,7 @@ function hideLoader() {
 
 function fetchUserEmail(accountId) {
     AP.request({
-        url: `/rest/api/3/user?accountId=${accountId}`,
+        url: `/rest/api/2/user?accountId=${accountId}`,
         type: "GET",
         success: function (responseText) {
             try {
