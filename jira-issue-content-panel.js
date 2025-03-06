@@ -243,14 +243,56 @@ async function  handleTestCaseClick(project,epicId,storyId, storyDescription) {
      storyId,
      storyDescription
    };
- AP.flag.create({
-  title: 'Notification',
-  body: 'This is a message for the user!',
-  type: 'success' // Types: 'info', 'success', 'warning', 'error'
-});
+ 
+ console.log("Payload:", payload);
 
-console.log("Payload:", payload);
- }
+  const headers = {
+    "access-key": API_KEY,
+    jiraUser: jiraUserID,
+    jiraKey: jiraAccessToken,
+    jiraUserUrl: jiraUserUrl,
+  };
+
+  console.log(headers);
+}
+async function createTestCase(payload) {
+  const url = `${API_BASE_URL}`;
+  const headers = {
+    "access-key": API_KEY,
+    jiraUser: jiraUserID,
+    jiraKey: jiraAccessToken,
+    jiraUserUrl: jiraUserUrl,
+  };
+
+  try {
+    const storyApiResponse = await fetch(url, {
+      method: "POST",
+      headers: {
+        ...headers,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!storyApiResponse.ok) {
+      const errorData = await storyApiResponse.json();
+      throw new Error(errorData.message || "Failed to create story");
+    }
+
+    const storyResponse = await storyApiResponse.json();
+    const buttonDiv = document.getElementById("buttonDiv");
+    buttonDiv.style.display = "none";
+    const buttonTestCaseDiv = document.getElementById("buttonTestCase");
+    buttonTestCaseDiv.style.display = "none";
+    const responseElement = document.getElementById("response");
+    responseElement.textContent =
+      storyResponse.message +
+      " .Kindly refresh the page to view the newly created test cases.";
+  } catch (error) {
+    showError(error.message);
+    throw error; // rethrow to stop further processing
+  }
+}
  async function fetchUserCredentials() {
   const credentialUrl = `${API_BASE_URL}/ava/force/credential?jiraUserUrl=${jiraUserUrl}`;
   const headers = { "access-key": API_KEY };
