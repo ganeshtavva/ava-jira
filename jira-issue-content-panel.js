@@ -225,9 +225,21 @@ async function createStory() {
     buttonDiv.style.display = "none";
 
     const responseElement = document.getElementById("response");
-    responseElement.textContent =
+    /*responseElement.textContent =
       storyResponse.message +
-      " .Kindly refresh the page to view the newly created stories.";
+      " .Kindly refresh the page to view the newly created stories.";*/
+    
+// Update <p> content
+responseElement.textContent =
+  storyResponse.message + " . Kindly refresh the page to view the newly created stories.";
+
+// Show AP.flag notification
+AP.flag.create({
+  title: "Success!",
+  body: responseElement.textContent,
+  type: "success"
+});
+
   } catch (error) {
     showError(error.message);
     throw error; // rethrow to stop further processing
