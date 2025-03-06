@@ -41,6 +41,24 @@ AP.getLocation(function (location) {
   // Set jiraUserUrl based on the current URL
   jiraUserUrl = urlObject.origin + "/rest/api/3";
 
+
+  AP.request({
+    url: "/rest/api/3/myself",
+    type: "GET",
+    success: function (responseText) {
+        try {
+            const response = JSON.parse(responseText);
+            userEmail = response.emailAddress || "Email not available";
+            console.log("Current User Email:", userEmail);
+        } catch (error) {
+            console.error("Error parsing user email response:", error);
+        }
+    },
+    error: function (xhr, status, error) {
+        console.error("Error fetching current user email:", status, error);
+    }
+});
+
   AP.request({
     url: `/rest/api/2/issue/${selectedIssue}`,
     type: 'GET',
