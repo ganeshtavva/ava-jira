@@ -340,6 +340,8 @@ function fetchUserEmail(accountId) {
         type: "GET",
         success: function (responseText) {
             try {
+                console.log(accountId);
+                console.log("/rest/api/2/user?accountId=${accountId}");
                 const response = JSON.parse(responseText);
                 userEmail = response.emailAddress || "Email not available";
                 console.log("User Email:", userEmail);
