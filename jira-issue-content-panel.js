@@ -41,24 +41,6 @@ AP.getLocation(function (location) {
   // Set jiraUserUrl based on the current URL
   jiraUserUrl = urlObject.origin + "/rest/api/3";
 
-
-  AP.request({
-    url: "/rest/api/3/myself",
-    type: "GET",
-    success: function (responseText) {
-        try {
-            const response = JSON.parse(responseText);
-            userEmail = response.emailAddress || "Email not available";
-            console.log("Current User Email:", userEmail);
-        } catch (error) {
-            console.error("Error parsing user email response:", error);
-        }
-    },
-    error: function (xhr, status, error) {
-        console.error("Error fetching current user email:", status, error);
-    }
-});
-
   AP.request({
     url: `/rest/api/2/issue/${selectedIssue}`,
     type: 'GET',
@@ -86,6 +68,8 @@ AP.getLocation(function (location) {
             // Extract issue type (Epic, Story, etc.)
             issueType = response.fields.issuetype.name;
             console.log('Issue Type:', issueType);
+            const reporterAccountId = fields.reporter.accountId;  // Reporter
+            fetchUserEmail(reporterAccountId);
 
             const buttonTestCase = document.getElementById("buttonTestCase");
             const userStoryCase = document.getElementById("buttonDiv");
@@ -350,6 +334,24 @@ function hideLoader() {
   loader.style.display = "none";
 }
 
+function fetchUserEmail(accountId) {
+    AP.request({
+        url: `/rest/api/3/user?accountId=${accountId}`,
+        type: "GET",
+        success: function (responseText) {
+            try {
+                const response = JSON.parse(responseText);
+                userEmail = response.emailAddress || "Email not available";
+                console.log("User Email:", userEmail);
+            } catch (error) {
+                console.error("Error parsing user email response:", error);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("Error fetching user email:", status, error);
+        }
+    });
+}
 // Handle 'Okay' button click
 function handleOkayClick() {
   const errorMessage = document.getElementById("errorMessage");
