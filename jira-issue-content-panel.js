@@ -187,7 +187,13 @@ async function fetchIssueDetails() {
       throw new Error("Unexpected response format from issue details API");
     }
   } catch (error) {
-    showError(error.message);
+    //showError(error.message);
+      AP.flag.create({
+    title: "Error",
+    body: error.message,
+    type: "error"
+  });
+
     throw error; // rethrow to stop further processing
   }
 }
