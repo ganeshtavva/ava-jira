@@ -17,7 +17,6 @@ let userName;
 let epicID;
 let issueType;
 let epicName;
-let userEmail;
 
 AP.getLocation(function (location) {
   const url = location.toString();
@@ -231,7 +230,7 @@ async function  handleTestCaseClick(project,epicId,storyId, storyDescription) {
   const payload = {
      project,
      epicId,
-     userEmail,
+     jiraUserID,
      storyId,
      storyDescription
    };
@@ -304,8 +303,12 @@ async function createTestCase(payload) {
          }
  
          const data = await response.json();
-         userEmail = data.payload.jiraUser;
-         console.log(data);
+        if (data.payload) {
+         jiraUserID = data.payload.jiraUser;
+         jiraAccessToken = data.payload.jiraKey;
+         jiraUserUrl = data.payload.jiraUserUrl;
+       }
+        console.log(data);
      } catch (error) {
          console.error("Error fetching credentials:", error.message);
  }
