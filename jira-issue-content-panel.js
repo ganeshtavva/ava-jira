@@ -76,7 +76,6 @@ AP.getLocation(function (location) {
             }
 
             if (issueType === 'Story') {
-                console.log("This is a Story. Showing the 'Generate Test Cases' button.");
                 userStoryCase.style.display = "none";
                 buttonTestCase.style.display = "block";
 
@@ -89,7 +88,6 @@ AP.getLocation(function (location) {
                     });
                 }
             } else {
-                console.log("This is NOT a Story. Hiding the 'Generate Test Cases' button.");
                 buttonTestCase.style.display = "none";
             }
 
