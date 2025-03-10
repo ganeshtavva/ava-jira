@@ -234,7 +234,11 @@ async function  handleTestCaseClick(project,epicId,storyId, storyDescription) {
      storyId,
      storyDescription
    };
- 
+ AP.flag.create({
+  title: 'Notification',
+  body: 'This is a message for the user!',
+  type: 'success' // Types: 'info', 'success', 'warning', 'error'
+});
  console.log("Payload:", payload);
 
   const headers = {
